@@ -1,0 +1,114 @@
+-- CONFIG
+local IMAGE_ID = "rbxassetid://COLOCA_AQUI_O_ID_DA_TUA_IMAGEM"
+
+-- SERVICES
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- GUI
+local ScreenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+ScreenGui.Name = "JumpHub"
+ScreenGui.ResetOnSpawn = false
+
+-- MAIN FRAME
+local Frame = Instance.new("Frame", ScreenGui)
+Frame.Size = UDim2.new(0, 300, 0, 180)
+Frame.Position = UDim2.new(0.5, -150, 0.5, -90)
+Frame.BackgroundColor3 = Color3.fromRGB(25,25,25)
+Frame.BorderSizePixel = 0
+Frame.Active = true
+Frame.Draggable = true
+
+local Corner = Instance.new("UICorner", Frame)
+Corner.CornerRadius = UDim.new(0, 15)
+
+-- RGB BORDER
+local Stroke = Instance.new("UIStroke", Frame)
+Stroke.Thickness = 3
+
+task.spawn(function()
+	while true do
+		for i = 0, 1, 0.01 do
+			Stroke.Color = Color3.fromHSV(i,1,1)
+			task.wait(0.03)
+		end
+	end
+end)
+
+-- TITLE
+local Title = Instance.new("TextLabel", Frame)
+Title.Size = UDim2.new(1,0,0,40)
+Title.BackgroundTransparency = 1
+Title.Text = "JUMP POWER HUB"
+Title.TextColor3 = Color3.new(1,1,1)
+Title.TextScaled = true
+Title.Font = Enum.Font.GothamBold
+
+-- TEXTBOX
+local TextBox = Instance.new("TextBox", Frame)
+TextBox.Size = UDim2.new(0.8,0,0,40)
+TextBox.Position = UDim2.new(0.1,0,0.4,0)
+TextBox.PlaceholderText = "Digite o poder do pulo"
+TextBox.Text = ""
+TextBox.TextScaled = true
+TextBox.BackgroundColor3 = Color3.fromRGB(40,40,40)
+TextBox.TextColor3 = Color3.new(1,1,1)
+
+local TBcorner = Instance.new("UICorner", TextBox)
+TBcorner.CornerRadius = UDim.new(0,10)
+
+-- APPLY BUTTON
+local Button = Instance.new("TextButton", Frame)
+Button.Size = UDim2.new(0.6,0,0,40)
+Button.Position = UDim2.new(0.2,0,0.7,0)
+Button.Text = "APLICAR"
+Button.TextScaled = true
+Button.BackgroundColor3 = Color3.fromRGB(60,60,60)
+Button.TextColor3 = Color3.new(1,1,1)
+
+local BtnCorner = Instance.new("UICorner", Button)
+BtnCorner.CornerRadius = UDim.new(0,10)
+
+Button.MouseButton1Click:Connect(function()
+	local value = tonumber(TextBox.Text)
+	if value then
+		local character = player.Character
+		if character and character:FindFirstChild("Humanoid") then
+			character.Humanoid.JumpPower = value
+		end
+	end
+end)
+
+-- MINIMIZE BUTTON
+local Minimize = Instance.new("TextButton", Frame)
+Minimize.Size = UDim2.new(0,30,0,30)
+Minimize.Position = UDim2.new(1,-35,0,5)
+Minimize.Text = "-"
+Minimize.TextScaled = true
+Minimize.BackgroundColor3 = Color3.fromRGB(80,80,80)
+Minimize.TextColor3 = Color3.new(1,1,1)
+
+local minimized = false
+
+-- MINI ICON
+local MiniIcon = Instance.new("ImageButton", ScreenGui)
+MiniIcon.Size = UDim2.new(0,60,0,60)
+MiniIcon.Position = UDim2.new(0.05,0,0.7,0)
+MiniIcon.Image = IMAGE_ID
+MiniIcon.Visible = false
+MiniIcon.BackgroundColor3 = Color3.fromRGB(25,25,25)
+
+local MiniCorner = Instance.new("UICorner", MiniIcon)
+MiniCorner.CornerRadius = UDim.new(1,0)
+
+Minimize.MouseButton1Click:Connect(function()
+	minimized = true
+	Frame.Visible = false
+	MiniIcon.Visible = true
+end)
+
+MiniIcon.MouseButton1Click:Connect(function()
+	minimized = false
+	Frame.Visible = true
+	MiniIcon.Visible = false
+end)
